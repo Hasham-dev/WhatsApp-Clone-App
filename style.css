@@ -1,0 +1,57 @@
+body,html{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+body{
+    font-family: 'Segoe UI',Helvetica, sans-serif,'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+    background-image: linear-gradient(180deg,#dddbd1,#d2dbdc);
+}
+
+.top{
+    height: 130px;
+    width: 100%;
+    background-color: #009688;
+    position: fixed;
+    z-index: -1;
+}
+.chatbox{
+    height: calc(100% - 40px);
+    width: 95%;
+    margin-top: 20px;
+    padding: 0;    
+
+}
+.profile-pic{
+    height: 40px;
+    width: 40px;
+    border-radius: 2rem;
+    margin: 8px;
+}
+.form-rounded{
+    border-radius: 1rem;
+}
+.card-header{
+    padding: 0 !important;
+}
+.friend-pic{
+    height: 50px;
+    width: 50px;
+    border-radius: 2rem;
+
+}
+.name{
+    font-weight: 500;
+    color: #000;
+}
+.under-name{
+    font-size: 12px;
+    line-height: 15px;
+    max-height: 15px;
+}
+.icon{
+    font-size: 20px;
+    color: #9ca1a3;
+}
