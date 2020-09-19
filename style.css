@@ -55,3 +55,31 @@ body{
     font-size: 20px;
     color: #9ca1a3;
 }
+
+.chat-pic{
+    height: 30px;
+    width: 30px;
+    border-radius: 2rem;
+
+}
+.receive{
+    background-color: lightgreen;
+    border-radius: 1rem;
+    padding: 10px 15px;
+    display: inline-block;
+}
+.time{
+    font-size: 10px;
+    color: #9ca1a3;
+    margin-top: 5%;
+    margin-left: 1%;
+}
+.send{
+    background-color: whitesmoke;
+    border-radius: 1rem;
+    padding: 10px 15px;
+    display: inline-block;
+}
+.card{
+    padding: 7px;
+}
