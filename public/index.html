@@ -24,11 +24,19 @@
                 <div class="card h-100">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-10 col-10 col-sm-10">
-                                <img src="./Passport Pic.jpg" alt="Personal Pic" class="profile-pic">
-                            </div>
-                            <div class="col-md-2 col-2 col-sm-2 d-md-none">
+                            <div class="col-md-1 col-1 col-sm-1 d-md-none">
                                 <i class="fa fa-arrow-left fa-2x" style="cursor: pointer;" onclick="hideChatList()"></i>
+                            </div>
+                            <div class="col-md-9 col-9 col-sm-9">
+                                <img id="imgProfile" src="./Passport Pic.jpg" alt="Personal Pic" class="profile-pic">
+                            </div>
+                            <div class="col-md-2 col-2 col-sm-2 ">
+                                <div class="dropleft">
+                                    <span class="dropdown-toggle" data-toggle='dropdown'>
+                                        <i class="fa fa-ellipsis-v icon fa-2x mt-3" style="cursor: pointer; float: right;"
+                                            onclick="hideChatList()"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <ul class="list-group list-group-flush">
@@ -53,7 +61,8 @@
                             <li class="list-group-item list-group-item-action" onclick="StartChat(1)">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="https://pbs.twimg.com/profile_images/768384719876653056/Hy2flDJm_400x400.jpg" alt="Personal Pic" class="friend-pic">
+                                        <img src="https://pbs.twimg.com/profile_images/768384719876653056/Hy2flDJm_400x400.jpg"
+                                            alt="Personal Pic" class="friend-pic">
                                     </div>
                                     <div class="col-md-10" style="cursor: pointer;">
                                         <div class="name">
@@ -68,7 +77,8 @@
                             <li class="list-group-item list-group-item-action" onclick="StartChat(1)">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT0zFRp4dFsXpCdiF-3WyWtRSBqVkFCwi0nvQ&usqp=CAU" alt="Personal Pic" class="friend-pic">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT0zFRp4dFsXpCdiF-3WyWtRSBqVkFCwi0nvQ&usqp=CAU"
+                                            alt="Personal Pic" class="friend-pic">
                                     </div>
                                     <div class="col-md-10" style="cursor: pointer;">
                                         <div class="name">
@@ -85,11 +95,12 @@
                 </div>
             </div>
             <div class="col-md-8 h-100 pl-0" id="side-2">
-                <div class="card h-100" id="chatPanel" style="display: none;">
+                <div class="card" id="chatPanel" style="display: none;">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-1 col-sm-1 col-md-1 col-lg-1 d-md-none">
-                                <i class="fa fa-bars mt-3 ml-2 fa-2x" style="cursor: pointer; opacity: 0.7; " onclick="showChatList()"></i>
+                                <i class="fa fa-bars mt-3 ml-2 fa-2x" style="cursor: pointer; opacity: 0.7; "
+                                    onclick="showChatList()"></i>
                             </div>
                             <div class="col-2 col-sm-2 col-md-2 col-lg-1">
                                 <img src="./Passport Pic.jpg" alt="Personal Pic" class="profile-pic">
@@ -109,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="messages">
                         <!-- message body -->
                         <!-- setting up the recever -->
                         <div class="row">
@@ -140,7 +151,8 @@
                                 <i class="fa fa-smile-o fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="col-md-10 col-8 col-sm-8 col-lg-10">
-                                <input type="text" placeholder="Type Here" class="form-control form-rounded">
+                                <input id="txtMessage" type="text" placeholder="Type Here"
+                                    class="form-control form-rounded" onclick="onKeyDown()">
                             </div>
                             <div class="col-md-1 col-2 col-sm-2 col-lg-1">
                                 <i class="fa fa-microphone fa-2x"></i>
@@ -150,9 +162,11 @@
                     <!-- setting up start body -->
                 </div>
                 <div id="divStart" class="text-center">
-                    <i class="fa fa-comments fa-2x mt-5" style="font-size: 250px; opacity: 0.7;" ></i>
+                    <i class="fa fa-comments fa-2x mt-5" style="font-size: 250px; opacity: 0.7;"></i>
                     <h2 class="mt-3">Select your friend from the list & start chatting</h2>
-                    <a href="#" onclick="showChatList()" class="d-md-none">New Chat</a>
+                    <a href="#" onclick="showChatList()" class="d-md-none btn btn-primary mb-5">New Chat</a><br>
+                    <button onclick="signIn()" class="btn btn-primary">Sign In </button>
+                    <button onclick="signOut()" class="btn btn-primary">Sign Out</button>
                 </div>
             </div>
         </div>
@@ -171,4 +185,8 @@
     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script>
 <script src="app.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.21.0/firebase.js"></script>
+<script src="./firebase_init.js"></script>
+
 </html>

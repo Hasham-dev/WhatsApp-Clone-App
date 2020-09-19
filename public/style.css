@@ -82,4 +82,12 @@ body{
 }
 .card{
     padding: 7px;
+    height: 94vh;
+}
+#messages{
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.dropdown-toggle::before{
+display: none !important;
 }
