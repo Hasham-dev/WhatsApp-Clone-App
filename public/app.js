@@ -57,9 +57,28 @@ function signIn(){
         userProfile.emial = firebase.auth().currentUser.email;
         userProfile.name = firebase.auth().currentUser.displayName;
         userProfile.photoURL = firebase.auth().currentUser.photoURL;
+        
+        var db = firebase.database().ref('users');
+        var flag = false;
+        db.on('value',function(users){
+            users.forEach(function(data){
+                var user = data.val();
+                if(user.email === userProfile.email){
+                    flag = true;
+                }
+            });
+            if (flag === false){
 
+                firebase.database().ref('users').push(userProfile,callback);
+            }else{
+                document.getElementById('imgProfile').src = firebase.auth().currentUser.photoURL;
+                document.getElementById('imgProfile').title = firebase.auth().currentUser.displayName;
+        
+                document.getElementById('lnkSignIn').style = 'display:none';
+                document.getElementById('lnkSignOut').style = '';         
+            }
+        })
 
-        firebase.database().ref('users').push(userProfile,callback);
         
     }).catch(function(error) {
         // Handle Errors here.
