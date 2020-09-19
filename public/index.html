@@ -36,9 +36,24 @@
                                         <i class="fa fa-ellipsis-v icon fa-2x mt-3" style="cursor: pointer; float: right;"></i>
                                     </span>
                                     <div class="dropdown-menu" style="float: right;">
-                                        <a href="#" class="dropdown-item">New Chat</a>
+                                        <a href="#" class="dropdown-item d-none" id="lnkNewChat" onclick="populateFriendList()" data-toggle="modal" data-target="#modalFriendList" ">New Chat</a>
                                         <a href="#" id="lnkSignIn" onclick='signIn()' class="dropdown-item">Sign In</a>
                                         <a href="#" id="lnkSignOut" onclick="signOut()" class="dropdown-item" style="display: none;">Sign Out</a>
+                                    </div>
+                                    <div class="modal fade" id="modalFriendList">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        Friend List
+                                                        <span class="close" data-dismiss='modal' style="cursor: pointer;">&times;</span>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush" id="lstFriend">
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
