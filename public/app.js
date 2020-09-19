@@ -52,20 +52,47 @@ function signIn(){
     var provider = new firebase.auth.GoogleAuthProvider();
     // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     firebase.auth().signInWithPopup(provider).then(function(result) {
-        alert(firebase.auth().currentUser.email + '\n' + firebase.auth().currentUser.displayName )
-        document.getElementById('imgProfile').src = firebase.auth().currentUser.photoURL;
-        document.getElementById('imgProfile').title = firebase.auth().currentUser.displayName;
-      }).catch(function(error) {
+        // alert(firebase.auth().currentUser.email + '\n' + firebase.auth().currentUser.displayName )
+        var userProfile = {emial:'',name:'',photoURL:''};
+        userProfile.emial = firebase.auth().currentUser.email;
+        userProfile.name = firebase.auth().currentUser.displayName;
+        userProfile.photoURL = firebase.auth().currentUser.photoURL;
+
+
+        firebase.database().ref('users').push(userProfile,callback);
+        
+    }).catch(function(error) {
         // Handle Errors here.
         console.log(error)
+        
       });
       firebase.auth().signOut();
 }
 
 function signOut(){
-    firebase.auth().signOut()
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        document.getElementById('imgProfile').src = './Passport Pic.jpg';
+        document.getElementById('imgProfile').title = '';
+
+        document.getElementById('lnkSignIn').style = '';
+        document.getElementById('lnkSignOut').style = 'display:none';
+      }).catch(function(error) {
+        akert(error);
+      });
 }
 
+function callback(error){
+    if(error){
+        alert(error);
+    }else{
+        document.getElementById('imgProfile').src = firebase.auth().currentUser.photoURL;
+        document.getElementById('imgProfile').title = firebase.auth().currentUser.displayName;
+
+        document.getElementById('lnkSignIn').style = 'display:none';
+        document.getElementById('lnkSignOut').style = '';
+    }
+}
 // function onFirebaseStateChanged(){
 //     firebase.auth().onAuthStateChanged(onStateChanged);
 // }
