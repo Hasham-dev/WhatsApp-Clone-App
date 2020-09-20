@@ -1,33 +1,38 @@
 var currentUserKey = ''
-
-function StartChat(friendKey, friendName, FriendPhoto) {
+var chatKey = ''
+function StartChat(friendKey, friendName, friendPhoto) {
 
     var db = firebase.database().ref('friend_list');
     var flag = false;
     db.on('value', function (friends) {
-        friends.forEach(function () {
-            var user = data.val;
+        friends.forEach(function (data) {
+            var user = data.val();
             if ((user.friendId === frinedList.friendId && user.userId === frinedList.userId) || (user.friendId === frinedList.userId && user.userId === frinedList.friendId)) {
                 flag = true;
+                chatKey = data.key;
             }
         })
         if (flag === false) {
 
-            firebase.database().ref('friend_list').push(frinedList, function (error) {
+           chatKey = firebase.database().ref('friend_list').push(frinedList, function (error) {
                 if (error) alert(error)
                 else {
                     document.getElementById("chatPanel").removeAttribute('style');
                     document.getElementById("divStart").setAttribute('style', "display:none");
                     hideChatList();
                 }
-            })
-        } else {
+            }).getKey();
+        }
+        else {
             document.getElementById("chatPanel").removeAttribute('style');
             document.getElementById("divStart").setAttribute('style', "display:none");
             hideChatList();
         }
         ///////////
         //display feind name photo
+
+        document.getElementById('divChatName').innerHTML = friendName;
+        document.getElementById('imgChat').src = friendPhoto;
     })
 
     var frinedList = { friendId: friendKey, userId: currentUserKey }
@@ -97,22 +102,33 @@ function onKeyDown() {
 }
 //calling send message
 function sendMessage() {
-    var message = `<div class="row justify-content-end">
-    <div class="col-4 col-sm-7 col-md-7 ">
-    <p class="send float-right">${document.getElementById('txtMessage').value}
-    <span class="time float-right">1:28 PM</span>
-    </p>
-    </div>
-    <div class="col-2 col-sm-1 col-md-1">
-    <img src="./Passport Pic.jpg" alt="Personal Pic" class="chat-pic">
-    </div>
-    </div>`
+    var chatMessage = {
+        msg:document.getElementById('txtMessage').value,
+        dateTime: new Date().toLocaleString()
+    };
 
-    document.getElementById('messages').innerHTML += message;
-    document.getElementById('txtMessage').value = "";
-    document.getElementById('txtMessage').focus();
+    firebase.database().ref("chatMessages").child(chatKey).push(chatMessage,function(error){
+        if(error) alert(error);
+        else {
 
-    document.getElementById('messages').scrollTo(0, document.getElementById('messages').clientHeight);
+            var message = `<div class="row justify-content-end">
+            <div class="col-4 col-sm-7 col-md-7 ">
+            <p class="send float-right">${document.getElementById('txtMessage').value}
+            <span class="time float-right">1:28 PM</span>
+            </p>
+            </div>
+            <div class="col-2 col-sm-1 col-md-1">
+            <img src="${firebase.auth().currentUser.photoURL}" alt="Personal Pic" class="chat-pic">
+            </div>
+            </div>`
+        
+            document.getElementById('messages').innerHTML += message;
+            document.getElementById('txtMessage').value = "";
+            document.getElementById('txtMessage').focus();
+        
+            document.getElementById('messages').scrollTo(0, document.getElementById('messages').clientHeight);
+        }
+    })
 }
 
 
@@ -138,6 +154,7 @@ function signIn() {
                 if (user.email === userProfile.email) {
                     flag = true;
                     currentUserKey = data.key;
+                    console.log(currentUserKey);
                 }
             });
             if (flag === false) {
