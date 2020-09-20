@@ -1,7 +1,11 @@
 var currentUserKey = ''
 var chatKey = ''
 function StartChat(friendKey, friendName, friendPhoto) {
-
+    var frinedList = { friendId: friendKey, userId: currentUserKey }
+    
+    
+    
+    console.log(friendKey, friendName,friendPhoto)
     var db = firebase.database().ref('friend_list');
     var flag = false;
     db.on('value', function (friends) {
@@ -14,12 +18,14 @@ function StartChat(friendKey, friendName, friendPhoto) {
         })
         if (flag === false) {
 
-           chatKey = firebase.database().ref('friend_list').push(frinedList, function (error) {
-                if (error) alert(error)
+            chatKey = firebase.database().ref('friend_list').push(frinedList, function (error) {
+                if (error) alert(error);
                 else {
                     document.getElementById("chatPanel").removeAttribute('style');
                     document.getElementById("divStart").setAttribute('style', "display:none");
                     hideChatList();
+            console.log("done1")
+
                 }
             }).getKey();
         }
@@ -27,6 +33,7 @@ function StartChat(friendKey, friendName, friendPhoto) {
             document.getElementById("chatPanel").removeAttribute('style');
             document.getElementById("divStart").setAttribute('style', "display:none");
             hideChatList();
+            console.log("done")
         }
         ///////////
         //display feind name photo
@@ -35,11 +42,53 @@ function StartChat(friendKey, friendName, friendPhoto) {
         document.getElementById('imgChat').src = friendPhoto;
     })
 
-    var frinedList = { friendId: friendKey, userId: currentUserKey }
 
 
 }
+// function StartChat(friendKey, friendName, friendPhoto) {
+//     var friendList = { friendId: friendKey, userId: currentUserKey };
+//     friend_id = friendKey;
 
+//     var db = firebase.database().ref('friend_list');
+//     var flag = false;
+//     db.on('value', function (friends) {
+//         friends.forEach(function (data) {
+//             var user = data.val();
+//             if ((user.friendId === friendList.friendId && user.userId === friendList.userId) || ((user.friendId === friendList.userId && user.userId === friendList.friendId))) {
+//                 flag = true;
+//                 chatKey = data.key;
+//             }
+//         });
+
+//         if (flag === false) {
+//             chatKey = firebase.database().ref('friend_list').push(friendList, function (error) {
+//                 if (error) alert(error);
+//                 else {
+//                     document.getElementById('chatPanel').removeAttribute('style');
+//                     document.getElementById('divStart').setAttribute('style', 'display:none');
+//                     hideChatList();
+//                 }
+//             }).getKey();
+//         }
+//         else {
+//             document.getElementById('chatPanel').removeAttribute('style');
+//             document.getElementById('divStart').setAttribute('style', 'display:none');
+//             hideChatList();
+//         }
+//         //////////////////////////////////////
+//         //display friend name and photo
+//         document.getElementById('divChatName').innerHTML = friendName;
+//         document.getElementById('imgChat').src = friendPhoto;
+
+//         document.getElementById('messages').innerHTML = '';
+
+//         document.getElementById('txtMessage').value = '';
+//         document.getElementById('txtMessage').focus();
+//         ////////////////////////////
+//         // Display The chat messages
+//         LoadChatMessages(chatKey, friendPhoto);
+//     });
+// }
 ///////
 
 function populateFriendList() {
@@ -52,14 +101,16 @@ function populateFriendList() {
     var db = firebase.database().ref('users');
     var lst = '';
     db.on('value', function (users) {
-        // if (user.hasChildren()) {
+        if (users.hasChildren()) {
         lst = `<li class="list-group-item" style="background-color:#f8f8f8;">
             <input type="text" placeholder="Search or new chat" class="form-control form-rounded">
         </li>`
-        // }
+        document.getElementById('lstFriend').innerHTML = lst;
+
+        }
         users.forEach(function (data) {
             var user = data.val();
-            if (user.email != firebase.auth().currentUser.email) {
+            if (user.email !== firebase.auth().currentUser.email) {
                 lst += `<li class="list-group-item list-group-item-action" data-dismiss="modal" onclick="StartChat('${data.key}','${user.name}','${user.photoURL}')">
                 <div class="row">
                 <div class="col-md-2">
@@ -73,10 +124,42 @@ function populateFriendList() {
                 </div>
                 </div>
             </li>`;
-            }
+            document.getElementById('lstFriend').innerHTML = lst;
+
+        }
         });
-        document.getElementById('lstFriend').innerHTML = lst;
-    });
+        });
+
+
+    //             document.getElementById('lstFriend').innerHTML = `<div class="text-center">
+    //                                                     <span class="spinner-border text-primary mt-5" style="width:7rem;height:7rem"></span>
+    //                                                 </div>`;
+    // var db = firebase.database().ref('users');
+    // var lst = '';
+    // db.on('value', function (users) {
+    //    if (users.hasChildren()) {
+    //        lst = `<li class="list-group-item" style="background-color:#f8f8f8;">
+    //                        <input type="text" placeholder="Search or new chat" class="form-control form-rounded" />
+    //                    </li>`;
+    //    }
+    //    users.forEach(function (data) {
+    //        var user = data.val();
+    //        if (user.email !== firebase.auth().currentUser.email) {
+    //            lst += `<li class="list-group-item list-group-item-action" data-dismiss="modal" onclick="StartChat('${data.key}', '${user.name}', '${user.photoURL}')">
+    //                        <div class="row">
+    //                            <div class="col-md-2">
+    //                                <img src="${user.photoURL}" class="rounded-circle friend-pic" />
+    //                            </div>
+    //                            <div class="col-md-10" style="cursor:pointer;">
+    //                                <div class="name">${user.name}</div>
+    //                            </div>
+    //                        </div>
+    //                    </li>`;
+    //        }
+    //    });
+
+    //    document.getElementById('lstFriend').innerHTML = lst;
+    // });
 
 
 }
@@ -103,12 +186,12 @@ function onKeyDown() {
 //calling send message
 function sendMessage() {
     var chatMessage = {
-        msg:document.getElementById('txtMessage').value,
+        msg: document.getElementById('txtMessage').value,
         dateTime: new Date().toLocaleString()
     };
 
-    firebase.database().ref("chatMessages").child(chatKey).push(chatMessage,function(error){
-        if(error) alert(error);
+    firebase.database().ref("chatMessages").child(chatKey).push(chatMessage, function (error) {
+        if (error) alert(error);
         else {
 
             var message = `<div class="row justify-content-end">
@@ -121,16 +204,57 @@ function sendMessage() {
             <img src="${firebase.auth().currentUser.photoURL}" alt="Personal Pic" class="chat-pic">
             </div>
             </div>`
-        
+
             document.getElementById('messages').innerHTML += message;
             document.getElementById('txtMessage').value = "";
             document.getElementById('txtMessage').focus();
-        
+
             document.getElementById('messages').scrollTo(0, document.getElementById('messages').clientHeight);
         }
     })
 }
 
+
+
+function LoadChatList() {
+    var db = firebase.database().ref('friend_list');
+    db.on('value', function (lists) {
+        document.getElementById('lstChat').innerHTML = `<li class="list-group-item" style="background-color:#f8f8f8;">
+        <input type="text" placeholder="Search or new chat" class="form-control form-rounded">
+    </li>`
+        lists.forEach(function (data) {
+            var lst = data.val();
+            console.log(lst)
+            var friendKey = '';
+
+            if (lst.friendId === currentUserKey) {
+                friendKey = lst.userId;
+            }
+            else if (lst.userId === currentUserKey) {
+                friendKey = lst.friendId;
+            }
+            console.log(friendKey);
+            firebase.database().ref('users').child(friendKey).on('value', function (data) {
+                var user = data.val();
+                document.getElementById('lstChat').innerHTML += `<li class="list-group-item list-group-item-action" onclick="StartChat('${data.key}','${user.name}','${user.photoURL}')">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="${user.photoURL}" alt="Personal Pic" class="friend-pic">
+                    </div>
+                    <div class="col-md-10" style="cursor: pointer;">
+                        <div class="name">
+                            ${user.name}
+                        </div>
+                        <div class="under-name">
+                            This is some text...
+                        </div>
+                    </div>
+                </div>
+            </li>`
+            })
+        })
+    })
+}
 
 ///Firebase Authentication
 
@@ -170,6 +294,8 @@ function signIn() {
         })
         document.getElementById('lnkNewChat').classList.remove("disabled");
         document.getElementById('lnkNewChat').classList.remove(`d-none`);
+
+        LoadChatList();
 
 
     }).catch(function (error) {
