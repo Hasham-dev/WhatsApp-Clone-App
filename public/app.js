@@ -40,10 +40,37 @@ function StartChat(friendKey, friendName, friendPhoto) {
 
         document.getElementById('divChatName').innerHTML = friendName;
         document.getElementById('imgChat').src = friendPhoto;
+
+        //Display old chat chat meesgaes
+        LoadChatMessages(chatKey);
     })
+}
 
+function LoadChatMessages(chatKey){
+    var db = firebase.database().ref('chatMessages').child(chatKey);
+    db.on('value',function(chats){
+        chats.forEach(function(data){
+            var chat = data.val();
+            var dateTime = chat.dateTime.split(",");
+            var messageDisplay = `<div class="row justify-content-end">
+            <div class="col-4 col-sm-7 col-md-7 ">
+            <p class="send float-right">
+            ${chat.msg}
+            <span class="time float-right" title="${dateTime[0]}">${dateTime[1]}</span>
+            </p>
+            </div>
+            <div class="col-2 col-sm-1 col-md-1">
+            <img src="${firebase.auth().currentUser.photoURL}" alt="Personal Pic" class="chat-pic">
+            </div>
+            </div>`
 
+            document.getElementById('messages').innerHTML += messageDisplay;
+            document.getElementById('txtMessage').value = "";
+            document.getElementById('txtMessage').focus();
 
+            document.getElementById('messages').scrollTo(0, document.getElementById('messages').clientHeight);
+        })
+    })
 }
 // function StartChat(friendKey, friendName, friendPhoto) {
 //     var friendList = { friendId: friendKey, userId: currentUserKey };
@@ -186,6 +213,7 @@ function onKeyDown() {
 //calling send message
 function sendMessage() {
     var chatMessage = {
+        userId: currentUserKey,
         msg: document.getElementById('txtMessage').value,
         dateTime: new Date().toLocaleString()
     };
