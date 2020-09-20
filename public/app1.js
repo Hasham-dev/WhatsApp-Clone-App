@@ -1,4 +1,4 @@
-﻿var currentUserKey = '';
+﻿﻿var currentUserKey = '';
 var chatKey = '';
 var friend_id = '';
 
@@ -9,79 +9,79 @@ document.addEventListener('keydown', function (key) {
 });
 
 ////////////////////////////////////////
-// function ChangeSendIcon(control) {
-//     if (control.value !== '') {
-//         document.getElementById('send').removeAttribute('style');
-//         document.getElementById('audio').setAttribute('style', 'display:none');
-//     }
-//     else {
-//         document.getElementById('audio').removeAttribute('style');
-//         document.getElementById('send').setAttribute('style', 'display:none');
-//     }
-// }
+function ChangeSendIcon(control) {
+    if (control.value !== '') {
+        document.getElementById('send').removeAttribute('style');
+        document.getElementById('audio').setAttribute('style', 'display:none');
+    }
+    else {
+        document.getElementById('audio').removeAttribute('style');
+        document.getElementById('send').setAttribute('style', 'display:none');
+    }
+}
 
-// /////////////////////////////////////////////
-// // Audio record
+/////////////////////////////////////////////
+// Audio record
 
-// let chunks = [];
-// let recorder;
-// var timeout;
+let chunks = [];
+let recorder;
+var timeout;
 
-// function record(control) {
-//     let device = navigator.mediaDevices.getUserMedia({ audio: true });
-//     device.then(stream => {
-//         if (recorder === undefined) {
-//             recorder = new MediaRecorder(stream);
-//             recorder.ondataavailable = e => {
-//                 chunks.push(e.data);
+function record(control) {
+    let device = navigator.mediaDevices.getUserMedia({ audio: true });
+    device.then(stream => {
+        if (recorder === undefined) {
+            recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = e => {
+                chunks.push(e.data);
 
-//                 if (recorder.state === 'inactive') {
-//                     let blob = new Blob(chunks, { type: 'audio/webm' });
-//                     //document.getElementById('audio').innerHTML = '<source src="' + URL.createObjectURL(blob) + '" type="video/webm" />'; //;
-//                     var reader = new FileReader();
+                if (recorder.state === 'inactive') {
+                    let blob = new Blob(chunks, { type: 'audio/webm' });
+                    //document.getElementById('audio').innerHTML = '<source src="' + URL.createObjectURL(blob) + '" type="video/webm" />'; //;
+                    var reader = new FileReader();
 
-//                     reader.addEventListener("load", function () {
-//                         var chatMessage = {
-//                             userId: currentUserKey,
-//                             msg: reader.result,
-//                             msgType: 'audio',
-//                             dateTime: new Date().toLocaleString()
-//                         };
+                    reader.addEventListener("load", function () {
+                        var chatMessage = {
+                            userId: currentUserKey,
+                            msg: reader.result,
+                            msgType: 'audio',
+                            dateTime: new Date().toLocaleString()
+                        };
 
-//                         firebase.database().ref('chatMessages').child(chatKey).push(chatMessage, function (error) {
-//                             if (error) alert(error);
-//                             else {
+                        firebase.database().ref('chatMessages').child(chatKey).push(chatMessage, function (error) {
+                            if (error) alert(error);
+                            else {
 
-//                                 document.getElementById('txtMessage').value = '';
-//                                 document.getElementById('txtMessage').focus();
-//                             }
-//                         });
-//                     }, false);
+                                document.getElementById('txtMessage').value = '';
+                                document.getElementById('txtMessage').focus();
+                            }
+                        });
+                    }, false);
 
-//                     reader.readAsDataURL(blob);
-//                 }
-//             }
+                    reader.readAsDataURL(blob);
+                }
+            }
 
-//             recorder.start();
-//             control.setAttribute('class', 'fas fa-stop fa-2x');
-//         }
-//     });
+            recorder.start();
+            control.setAttribute('class', 'fas fa-stop fa-2x');
+        }
+    });
 
-//     if (recorder !== undefined) {
-//         if (control.getAttribute('class').indexOf('stop') !== -1) {
-//             recorder.stop();
-//             control.setAttribute('class', 'fas fa-microphone fa-2x');
-//         }
-//         else {
-//             chunks = [];
-//             recorder.start();
-//             control.setAttribute('class', 'fas fa-stop fa-2x');
-//         }
-//     }
-// }
+    if (recorder !== undefined) {
+        if (control.getAttribute('class').indexOf('stop') !== -1) {
+            recorder.stop();
+            control.setAttribute('class', 'fas fa-microphone fa-2x');
+        }
+        else {
+            chunks = [];
+            recorder.start();
+            control.setAttribute('class', 'fas fa-stop fa-2x');
+        }
+    }
+}
 
-// /////////////////////////////////////////////////////////////////
-// // Emoji
+/////////////////////////////////////////////////////////////////
+// Emoji
 // loadAllEmoji();
 
 // function loadAllEmoji() {
@@ -107,7 +107,7 @@ document.addEventListener('keydown', function (key) {
 //////////////////////////////////////////////////////////////////////
 function StartChat(friendKey, friendName, friendPhoto) {
     var friendList = { friendId: friendKey, userId: currentUserKey };
-    // friend_id = friendKey;
+    friend_id = friendKey;
 
     var db = firebase.database().ref('friend_list');
     var flag = false;
@@ -160,17 +160,17 @@ function LoadChatMessages(chatKey, friendPhoto) {
             var chat = data.val();
             var dateTime = chat.dateTime.split(",");
             var msg = '';
-            // if (chat.msgType === 'image') {
-            //     msg = `<img src='${chat.msg}' class="img-fluid" />`;
-            // }
-            // else if (chat.msgType === 'audio') {
-            //     msg = `<audio controls>
-            //             <source src="${chat.msg}" type="video/webm" />
-            //         </audio>`;
-            // }
-            // else {
+            if (chat.msgType === 'image') {
+                msg = `<img src='${chat.msg}' class="img-fluid" />`;
+            }
+            else if (chat.msgType === 'audio') {
+                msg = `<audio controls>
+                        <source src="${chat.msg}" type="video/webm" />
+                    </audio>`;
+            }
+            else {
                 msg = chat.msg;
-            // }
+            }
             if (chat.userId !== currentUserKey) {
                 messageDisplay += `<div class="row">
                                     <div class="col-2 col-sm-1 col-md-1">
@@ -219,32 +219,32 @@ function SendMessage() {
     var chatMessage = {
         userId: currentUserKey,
         msg: document.getElementById('txtMessage').value,
-        // msgType: 'normal',
+        msgType: 'normal',
         dateTime: new Date().toLocaleString()
     };
 
     firebase.database().ref('chatMessages').child(chatKey).push(chatMessage, function (error) {
         if (error) alert(error);
         else {
-            // firebase.database().ref('fcmTokens').child(friend_id).once('value').then(function (data) {
-            //     $.ajax({
-            //         url: 'https://fcm.googleapis.com/fcm/send',
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'Authorization': 'key=AIzaSyBXkd3HN8IO3Xa4AFTvqFpo5LXZQ9-Rj7s'
-            //         },
-            //         data: JSON.stringify({
-            //             'to': data.val().token_id, 'data': { 'message': chatMessage.msg.substring(0, 30) + '...', 'icon': firebase.auth().currentUser.photoURL }
-            //         }),
-            //         success: function (response) {
-            //             console.log(response);
-            //         },
-            //         error: function (xhr, status, error) {
-            //             console.log(xhr.error);
-            //         }
-            //     });
-            // });
+            firebase.database().ref('fcmTokens').child(friend_id).once('value').then(function (data) {
+                $.ajax({
+                    url: 'https://fcm.googleapis.com/fcm/send',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'key=AIzaSyBXkd3HN8IO3Xa4AFTvqFpo5LXZQ9-Rj7s'
+                    },
+                    data: JSON.stringify({
+                        'to': data.val().token_id, 'data': { 'message': chatMessage.msg.substring(0, 30) + '...', 'icon': firebase.auth().currentUser.photoURL }
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.error);
+                    }
+                });
+            });
             document.getElementById('txtMessage').value = '';
             document.getElementById('txtMessage').focus();
         }
@@ -253,42 +253,42 @@ function SendMessage() {
 
 ///////////////////////////////////////////////////////////////
 //Send image
-// function ChooseImage() {
-//     document.getElementById('imageFile').click();
-// }
+function ChooseImage() {
+    document.getElementById('imageFile').click();
+}
 
-// function SendImage(event) {
-//     var file = event.files[0];
+function SendImage(event) {
+    var file = event.files[0];
 
-//     if (!file.type.match("image.*")) {
-//         alert("Please select image only.");
-//     }
-//     else {
-//         var reader = new FileReader();
+    if (!file.type.match("image.*")) {
+        alert("Please select image only.");
+    }
+    else {
+        var reader = new FileReader();
 
-//         reader.addEventListener("load", function () {
-//             var chatMessage = {
-//                 userId: currentUserKey,
-//                 msg: reader.result,
-//                 msgType: 'image',
-//                 dateTime: new Date().toLocaleString()
-//             };
+        reader.addEventListener("load", function () {
+            var chatMessage = {
+                userId: currentUserKey,
+                msg: reader.result,
+                msgType: 'image',
+                dateTime: new Date().toLocaleString()
+            };
 
-//             firebase.database().ref('chatMessages').child(chatKey).push(chatMessage, function (error) {
-//                 if (error) alert(error);
-//                 else {
+            firebase.database().ref('chatMessages').child(chatKey).push(chatMessage, function (error) {
+                if (error) alert(error);
+                else {
 
-//                     document.getElementById('txtMessage').value = '';
-//                     document.getElementById('txtMessage').focus();
-//                 }
-//             });
-//         }, false);
+                    document.getElementById('txtMessage').value = '';
+                    document.getElementById('txtMessage').focus();
+                }
+            });
+        }, false);
 
-//         if (file) {
-//             reader.readAsDataURL(file);
-//         }
-//     }
-// }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+}
 ///////////////////////////////////////////////////////////////////////
 /////////////
 
@@ -333,7 +333,7 @@ function PopulateUserList() {
                                                          <span class="spinner-border text-primary mt-5" style="width:7rem;height:7rem"></span>
                                                      </div>`;
     var db = firebase.database().ref('users');
-    // var dbNoti = firebase.database().ref('notifications');
+    var dbNoti = firebase.database().ref('notifications');
     var lst = '';
     db.on('value', function (users) {
         if (users.hasChildren()) {
@@ -342,94 +342,94 @@ function PopulateUserList() {
                         </li>`;
             document.getElementById('lstUsers').innerHTML = lst;
         }
-        // users.forEach(function (data) {
-        //     var user = data.val();
-        //     if (user.email !== firebase.auth().currentUser.email) {
-        //         dbNoti.orderByChild('sendTo').equalTo(data.key).on('value', function (noti) {
-        //             if (noti.numChildren() > 0 && Object.values(noti.val())[0].sendFrom === currentUserKey) {
-        //                 lst = `<li class="list-group-item list-group-item-action">
-        //                     <div class="row">
-        //                         <div class="col-md-2">
-        //                             <img src="${user.photoURL}" class="rounded-circle friend-pic" />
-        //                         </div>
-        //                         <div class="col-md-10" style="cursor:pointer;">
-        //                             <div class="name">${user.name}
-        //                                 <button class="btn btn-sm btn-defualt" style="float:right;"><i class="fas fa-user-plus"></i> Sent</button>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 </li>`;
-        //                 document.getElementById('lstUsers').innerHTML += lst;
-        //             }
-        //             else {
-        //                 dbNoti.orderByChild('sendFrom').equalTo(data.key).on('value', function (noti) {
-        //                     if (noti.numChildren() > 0 && Object.values(noti.val())[0].sendTo === currentUserKey) {
-        //                         lst = `<li class="list-group-item list-group-item-action">
-        //                     <div class="row">
-        //                         <div class="col-md-2">
-        //                             <img src="${user.photoURL}" class="rounded-circle friend-pic" />
-        //                         </div>
-        //                         <div class="col-md-10" style="cursor:pointer;">
-        //                             <div class="name">${user.name}
-        //                                 <button class="btn btn-sm btn-defualt" style="float:right;"><i class="fas fa-user-plus"></i> Pending</button>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 </li>`;
-        //                         document.getElementById('lstUsers').innerHTML += lst;
-        //                     }
-        //                     else {
-        //                         lst = `<li class="list-group-item list-group-item-action" data-dismiss="modal">
-        //                     <div class="row">
-        //                         <div class="col-md-2">
-        //                             <img src="${user.photoURL}" class="rounded-circle friend-pic" />
-        //                         </div>
-        //                         <div class="col-md-10" style="cursor:pointer;">
-        //                             <div class="name">${user.name}
-        //                                 <button onclick="SendRequest('${data.key}')" class="btn btn-sm btn-primary" style="float:right;"><i class="fas fa-user-plus"></i> Send Request</button>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 </li>`;
+        users.forEach(function (data) {
+            var user = data.val();
+            if (user.email !== firebase.auth().currentUser.email) {
+                dbNoti.orderByChild('sendTo').equalTo(data.key).on('value', function (noti) {
+                    if (noti.numChildren() > 0 && Object.values(noti.val())[0].sendFrom === currentUserKey) {
+                        lst = `<li class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="${user.photoURL}" class="rounded-circle friend-pic" />
+                                </div>
+                                <div class="col-md-10" style="cursor:pointer;">
+                                    <div class="name">${user.name}
+                                        <button class="btn btn-sm btn-defualt" style="float:right;"><i class="fas fa-user-plus"></i> Sent</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`;
+                        document.getElementById('lstUsers').innerHTML += lst;
+                    }
+                    else {
+                        dbNoti.orderByChild('sendFrom').equalTo(data.key).on('value', function (noti) {
+                            if (noti.numChildren() > 0 && Object.values(noti.val())[0].sendTo === currentUserKey) {
+                                lst = `<li class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="${user.photoURL}" class="rounded-circle friend-pic" />
+                                </div>
+                                <div class="col-md-10" style="cursor:pointer;">
+                                    <div class="name">${user.name}
+                                        <button class="btn btn-sm btn-defualt" style="float:right;"><i class="fas fa-user-plus"></i> Pending</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`;
+                                document.getElementById('lstUsers').innerHTML += lst;
+                            }
+                            else {
+                                lst = `<li class="list-group-item list-group-item-action" data-dismiss="modal">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="${user.photoURL}" class="rounded-circle friend-pic" />
+                                </div>
+                                <div class="col-md-10" style="cursor:pointer;">
+                                    <div class="name">${user.name}
+                                        <button onclick="SendRequest('${data.key}')" class="btn btn-sm btn-primary" style="float:right;"><i class="fas fa-user-plus"></i> Send Request</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`;
 
-        //                         document.getElementById('lstUsers').innerHTML += lst;
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
+                                document.getElementById('lstUsers').innerHTML += lst;
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 
 }
 
-// function NotificationCount() {
-//     let db = firebase.database().ref('notifications');
+function NotificationCount() {
+    let db = firebase.database().ref('notifications');
 
-//     db.orderByChild('sendTo').equalTo(currentUserKey).on('value', function (noti) {
-//         let notiArray = Object.values(noti.val()).filter(n => n.status === 'Pending');
-//         document.getElementById('notification').innerHTML = notiArray.length;
-//     });
-// }
+    db.orderByChild('sendTo').equalTo(currentUserKey).on('value', function (noti) {
+        let notiArray = Object.values(noti.val()).filter(n => n.status === 'Pending');
+        document.getElementById('notification').innerHTML = notiArray.length;
+    });
+}
 
-// function SendRequest(key) {
-//     let notification = {
-//         sendTo: key,
-//         sendFrom: currentUserKey,
-//         name: firebase.auth().currentUser.displayName,
-//         photo: firebase.auth().currentUser.photoURL,
-//         dateTime: new Date().toLocaleString(),
-//         status: 'Pending'
-//     };
+function SendRequest(key) {
+    let notification = {
+        sendTo: key,
+        sendFrom: currentUserKey,
+        name: firebase.auth().currentUser.displayName,
+        photo: firebase.auth().currentUser.photoURL,
+        dateTime: new Date().toLocaleString(),
+        status: 'Pending'
+    };
 
-//     firebase.database().ref('notifications').push(notification, function (error) {
-//         if (error) alert(error);
-//         else {
-//             // do something
-//             PopulateUserList();
-//         }
-//     });
-// }
+    firebase.database().ref('notifications').push(notification, function (error) {
+        if (error) alert(error);
+        else {
+            // do something
+            PopulateUserList();
+        }
+    });
+}
 
 function PopulateNotifications() {
     document.getElementById('lstNotification').innerHTML = `<div class="text-center">
@@ -543,9 +543,9 @@ function signOut() {
     firebase.auth().signOut();
 }
 
-function onFirebaseStateChanged() {
-    firebase.auth().onAuthStateChanged(onStateChanged);
-}
+// function onFirebaseStateChanged() {
+//     firebase.auth().onAuthStateChanged(onStateChanged);
+// }
 
 function onStateChanged(user) {
     if (user) {
@@ -606,6 +606,7 @@ function onStateChanged(user) {
 
         document.getElementById('lnkNewChat').classList.add('disabled');
     }
+    
 }
 
 function callback(error) {
@@ -624,4 +625,4 @@ function callback(error) {
 /////////
 // Call auth State changed
 
-onFirebaseStateChanged();
+// onFirebaseStateChanged();
